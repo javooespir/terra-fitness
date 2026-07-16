@@ -20,7 +20,7 @@ const slides: Slide[] = [
   {
     video: "/videos/hero-1.mp4",
     videoDesktop: "/videos/hero-1-desktop.mp4",
-    photo: "/gimnasio1.png",
+    photo: "/gimnasio1.jpg",
     ribbonColor: "#d4b500",
     ribbonText: "#0a0a0a",
     ribbon: "ENTRENÁ EN GRUPO",
@@ -44,7 +44,7 @@ const slides: Slide[] = [
   {
     video: "/videos/hero-3.mp4",
     videoDesktop: "/videos/hero-3-desktop.mp4",
-    photo: "/gimnasio 3.png",
+    photo: "/gimnasio-3.jpg",
     ribbonColor: "#0a0a0a",
     ribbonText: "#d4b500",
     ribbon: "SIN LÍMITES",

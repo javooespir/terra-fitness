@@ -1,7 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { gsap } from "gsap";
+
+function subscribeReduceMotion(callback: () => void) {
+  const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mq.addEventListener("change", callback);
+  return () => mq.removeEventListener("change", callback);
+}
+function getReduceMotionSnapshot() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+function getReduceMotionServerSnapshot() {
+  return false;
+}
 
 // How long the welcome screen holds before splitting open. It waits for the
 // page to actually finish loading (so slow mobile connections get real cover
@@ -31,23 +43,29 @@ export function signalCurtainReady() {
  * down) revealing the page underneath, like a curtain opening.
  */
 export function GlobalCurtain() {
+  const reduceMotion = useSyncExternalStore(
+    subscribeReduceMotion,
+    getReduceMotionSnapshot,
+    getReduceMotionServerSnapshot
+  );
   const [mounted, setMounted] = useState(true);
   const topRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
 
+  // Reduced motion skips the curtain entirely (render returns null below) —
+  // still has to tell Hero the reveal "happened" so its own intro isn't stuck
+  // waiting forever for a signal that would otherwise never come.
   useEffect(() => {
+    if (reduceMotion) signalCurtainReady();
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    if (reduceMotion) return;
     const top = topRef.current;
     const bottom = bottomRef.current;
     const logo = logoRef.current;
     if (!top || !bottom || !logo) return;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) {
-      setMounted(false);
-      signalCurtainReady();
-      return;
-    }
 
     document.body.style.overflow = "hidden";
 
@@ -95,9 +113,9 @@ export function GlobalCurtain() {
       document.body.style.overflow = "";
       gsap.killTweensOf([top, bottom, logo]);
     };
-  }, []);
+  }, [reduceMotion]);
 
-  if (!mounted) return null;
+  if (reduceMotion || !mounted) return null;
 
   return (
     <div className="fixed inset-0 z-[300] pointer-events-none" aria-hidden="true">

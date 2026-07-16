@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { InstagramIcon } from "@/components/InstagramIcon";
@@ -63,6 +63,13 @@ export function PricingSection() {
 
   const [activeTab, setActiveTab] = useState<Tab>("general");
   const firstRender = useRef(true);
+  // The resize handler below is set up once and lives for the component's
+  // whole lifetime — reading `activeTab` directly would close over whatever
+  // tab was active on mount. A ref always reflects the latest tab instead.
+  const activeTabRef = useRef(activeTab);
+  useEffect(() => {
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
 
   function moveHighlight(btn: HTMLButtonElement) {
     const switchEl = switchRef.current;
@@ -107,7 +114,7 @@ export function PricingSection() {
     const btn = tabButtonRefs.current[0];
     if (!btn || !switchRef.current || !highlightRef.current) return;
     const place = () => {
-      const activeBtn = tabButtonRefs.current[TABS.findIndex((t) => t.id === activeTab)];
+      const activeBtn = tabButtonRefs.current[TABS.findIndex((t) => t.id === activeTabRef.current)];
       if (activeBtn) {
         gsap.set(highlightRef.current, {
           x: activeBtn.getBoundingClientRect().left - switchRef.current!.getBoundingClientRect().left - 4.8,
@@ -118,7 +125,6 @@ export function PricingSection() {
     place();
     window.addEventListener("resize", place);
     return () => window.removeEventListener("resize", place);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Scroll-in reveal (once) + vertical-cut title + sparkles background.
