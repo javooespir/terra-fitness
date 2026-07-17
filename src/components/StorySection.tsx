@@ -12,18 +12,18 @@ const randomChar = () => GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.le
 const BADGE_TEXT = "Activá tu cuerpo";
 
 const photos = [
-  "/photos/plate-graffiti.jpg",
-  "/photos/woman-training.jpg",
-  "/photos/floor-atmosphere.jpg",
-  "/photos/dumbbell-40kg.jpg",
-  "/photos/plate-rack-warm.jpg",
-  "/photos/crowd-training.jpg",
-  "/photos/pullup-action-1.jpg",
-  "/photos/coach-back-1.jpg",
-  "/photos/cable-machine-floor.jpg",
-  "/photos/dumbbell-rack-row.jpg",
-  "/photos/terra-tee-dumbbell.jpg",
-  "/photos/coach-back-2.jpg",
+  { src: "/photos/plate-graffiti.jpg", alt: "Discos de pesas con arte urbano en la pared de Terra Fitness" },
+  { src: "/photos/woman-training.jpg", alt: "Mujer entrenando con pesas en Terra Fitness Ituzaingó" },
+  { src: "/photos/floor-atmosphere.jpg", alt: "Piso de entrenamiento de Terra Fitness" },
+  { src: "/photos/dumbbell-40kg.jpg", alt: "Mancuerna de 40kg en el sector de musculación" },
+  { src: "/photos/plate-rack-warm.jpg", alt: "Rack de discos de pesas en Terra Fitness" },
+  { src: "/photos/crowd-training.jpg", alt: "Clase grupal de entrenamiento funcional en Terra Fitness" },
+  { src: "/photos/pullup-action-1.jpg", alt: "Alumno haciendo dominadas en Terra Fitness" },
+  { src: "/photos/coach-back-1.jpg", alt: "Entrenador de Terra Fitness asistiendo una clase" },
+  { src: "/photos/cable-machine-floor.jpg", alt: "Máquina de poleas en el piso de Terra Fitness" },
+  { src: "/photos/dumbbell-rack-row.jpg", alt: "Fila de mancuernas ordenadas en Terra Fitness" },
+  { src: "/photos/terra-tee-dumbbell.jpg", alt: "Remera de Terra Fitness junto a una mancuerna" },
+  { src: "/photos/coach-back-2.jpg", alt: "Entrenador de Terra Fitness supervisando entrenamiento" },
 ];
 
 // top/left mark each tile's CENTER (see translate(-50%,-50%) below), not its
@@ -297,9 +297,9 @@ export function StorySection() {
           />
         </svg>
 
-        {photos.map((src, i) => (
+        {photos.map((photo, i) => (
           <div
-            key={src}
+            key={photo.src}
             ref={(el) => { tileRefs.current[i] = el; }}
             className="absolute z-[3] w-[112px] sm:w-[160px] md:w-[230px] lg:w-[300px] xl:w-[360px] overflow-hidden border border-white/10 will-change-transform"
             style={{
@@ -310,7 +310,7 @@ export function StorySection() {
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={src} alt="" className="w-full h-full object-cover" />
+            <img src={photo.src} alt={photo.alt} className="w-full h-full object-cover" />
           </div>
         ))}
 

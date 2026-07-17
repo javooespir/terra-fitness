@@ -310,6 +310,14 @@ export function HeroSection() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img ref={bgPhotoRef} alt="" className="absolute inset-0 z-[1] w-full h-full object-cover" />
 
+      {/* The 3 slide titles below are all mounted at once (crossfaded via
+          opacity for the carousel), so a search engine sees all 3 in the DOM
+          simultaneously — that can't be the page's <h1> without producing 3
+          duplicate H1s. This one static, screen-reader/SEO-only heading
+          carries the actual page topic instead; the rotating slide titles
+          are marketing copy, not the semantic heading. */}
+      <h1 className="sr-only">Terra Fitness — Gimnasio en Ituzaingó: Musculación, CrossFit, Funcional y Calistenia</h1>
+
       {slides.map((slide, i) => (
         <div
           key={slide.video}
@@ -346,13 +354,14 @@ export function HeroSection() {
 
           <div className="relative z-10 h-full flex items-center justify-center px-6">
             <div className="text-center max-w-2xl">
-              <h1
+              <p
                 ref={(el) => { titleRefs.current[i] = el; }}
+                aria-hidden="true"
                 className="font-black uppercase text-white leading-[0.95] mb-5 will-change-transform"
                 style={{ fontFamily: "var(--font-barlow-condensed)", fontSize: "clamp(2.6rem, 7vw, 6rem)" }}
               >
                 {slide.title}
-              </h1>
+              </p>
               <p
                 ref={(el) => { subtitleRefs.current[i] = el; }}
                 className="text-gray-200 text-base sm:text-lg mb-8 max-w-lg mx-auto will-change-transform"

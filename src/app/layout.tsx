@@ -33,13 +33,16 @@ const montserratHeading = Montserrat({
 const siteUrl = "https://terra-fitness.encende.click";
 
 export const metadata: Metadata = {
-  title: "Terra Fitness | Training Center Ituzaingó",
+  title: "Terra Fitness | Gimnasio en Ituzaingó",
   description:
     "Gimnasio en Ituzaingó con equipamiento de última generación, clases de musculación, calistenia, funcional, crossfit y spinning. Venite a entrenar.",
   keywords: "gimnasio ituzaingo, terra fitness, musculacion, calistenia, crossfit, spinning, funcional",
   metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
-    title: "Terra Fitness | Training Center Ituzaingó",
+    title: "Terra Fitness | Gimnasio en Ituzaingó",
     description: "El gimnasio más completo de Ituzaingó. Equipamiento nuevo, clases grupales y entrenadores profesionales.",
     type: "website",
     locale: "es_AR",
@@ -50,13 +53,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Terra Fitness | Training Center Ituzaingó",
+        alt: "Terra Fitness | Gimnasio en Ituzaingó",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Terra Fitness | Training Center Ituzaingó",
+    title: "Terra Fitness | Gimnasio en Ituzaingó",
     description: "El gimnasio más completo de Ituzaingó.",
     images: ["/opengraph-image"],
   },
