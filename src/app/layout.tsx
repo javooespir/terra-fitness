@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
@@ -69,15 +68,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="es"
-      className={`${montserrat.variable} ${montserratHeading.variable} dark`}
-      suppressHydrationWarning
-    >
+    <html lang="es" className={`${montserrat.variable} ${montserratHeading.variable} dark`}>
       <body className="min-h-full flex flex-col bg-[#2e2e33] antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
-          <SmoothScroll>{children}</SmoothScroll>
-        </ThemeProvider>
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
