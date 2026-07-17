@@ -44,13 +44,14 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     });
 
     // If "load" fires late (slow network, heavy video) and the user has
-    // already scrolled into a pinned section by then, refreshing recalculates
-    // every pin's spacer height and visibly jumps the page mid-scroll — the
-    // "reaches the photo section, glitches, background flashes" bug. Only
-    // safe to refresh here if they haven't scrolled into anything yet.
-    const onLoad = () => {
-      if (window.scrollY < 100) ScrollTrigger.refresh();
-    };
+    // already scrolled into a pinned section by then, its start/end were
+    // measured against layout that hadn't settled yet (fonts/video not sized)
+    // and stay wrong for the rest of the session — the pin engages at the
+    // wrong scroll position, which reads as the section stalling or the
+    // previous section's background bleeding through. Refreshing can cause a
+    // one-time small jump, but that beats a pin whose boundaries are wrong
+    // for the whole visit, so always refresh here regardless of scroll depth.
+    const onLoad = () => ScrollTrigger.refresh();
     window.addEventListener("load", onLoad);
 
     // Safari's back-forward cache can restore this page from an in-memory

@@ -161,7 +161,7 @@ export function ClassesShowcaseSection() {
             // cross the whole range before the catch-up finishes, so the pin
             // releases (scrolls away) before the reveal ever paints on screen.
             // A tighter scrub tracks scroll almost 1:1 so it can't be outrun.
-            end: measuredStart + window.innerHeight * 1.5,
+            end: measuredStart + window.innerHeight * 1.0,
             scrub: 0.3,
             pin: true,
             anticipatePin: 1,

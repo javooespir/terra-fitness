@@ -200,7 +200,7 @@ export function StorySection() {
         // short pin's whole range before the reveal ever paints (see the same
         // fix in ClassesShowcaseSection) — tighter scrub tracks scroll closely
         // enough that it can't be outrun, plus a little more distance as buffer.
-        scrollTrigger: { trigger: stackWrap, start: "top top", end: "+=130%", scrub: 0.3, pin: true },
+        scrollTrigger: { trigger: stackWrap, start: "top top", end: "+=85%", scrub: 0.3, pin: true },
       });
 
       tileRefs.current.forEach((tile, i) => {
