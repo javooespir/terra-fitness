@@ -138,6 +138,15 @@
   body {
     -webkit-backdrop-filter: none;
   }
+  /* Scroll stays locked by default (matches the curtain's covered state in
+     the server-rendered HTML) so a slow hydration on a throttled device
+     can't let scroll slip through underneath while the curtain still looks
+     frozen on screen. GlobalCurtain adds .curtain-done once it's actually
+     safe to scroll — a JS-applied inline style can't do this because it
+     doesn't exist until React hydrates, which is exactly the gap this closes. */
+  html:not(.curtain-done) {
+    overflow: hidden;
+  }
 }
 
 /* Scrollbar */

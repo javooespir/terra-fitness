@@ -110,7 +110,7 @@ export default function OGImage() {
             display: "flex",
           }}
         >
-          terra-fitness.encende.click
+          terra-fitness.com.ar
         </div>
       </div>
     ),

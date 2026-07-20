@@ -30,7 +30,7 @@ const montserratHeading = Montserrat({
   display: "swap",
 });
 
-const siteUrl = "https://terra-fitness.encende.click";
+const siteUrl = "https://terra-fitness.com.ar";
 
 export const metadata: Metadata = {
   title: "Terra Fitness | Gimnasio en Ituzaingó",

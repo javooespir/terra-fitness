@@ -57,7 +57,10 @@ export function GlobalCurtain() {
   // still has to tell Hero the reveal "happened" so its own intro isn't stuck
   // waiting forever for a signal that would otherwise never come.
   useEffect(() => {
-    if (reduceMotion) signalCurtainReady();
+    if (reduceMotion) {
+      signalCurtainReady();
+      document.documentElement.classList.add("curtain-done");
+    }
   }, [reduceMotion]);
 
   useEffect(() => {
@@ -96,6 +99,7 @@ export function GlobalCurtain() {
       const tl = gsap.timeline({
         onComplete: () => {
           document.body.style.overflow = "";
+          document.documentElement.classList.add("curtain-done");
           setMounted(false);
         },
       });
