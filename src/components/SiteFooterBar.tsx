@@ -1,7 +1,7 @@
 import { InstagramIcon } from "@/components/InstagramIcon";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 
-const WA_NUMBER = "5491131462214";
+const WA_NUMBER = "5491124066934";
 const IG_URL = "https://www.instagram.com/terrafitness.arg/";
 
 export function SiteFooterBar() {

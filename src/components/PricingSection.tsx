@@ -12,7 +12,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const WA_NUMBER = "5491131462214";
+const WA_NUMBER = "5491124066934";
 const IG_URL = "https://www.instagram.com/terrafitness.arg/";
 
 interface Plan {
