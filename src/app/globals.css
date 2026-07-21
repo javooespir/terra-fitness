@@ -141,12 +141,59 @@
   /* Scroll stays locked by default (matches the curtain's covered state in
      the server-rendered HTML) so a slow hydration on a throttled device
      can't let scroll slip through underneath while the curtain still looks
-     frozen on screen. GlobalCurtain adds .curtain-done once it's actually
-     safe to scroll — a JS-applied inline style can't do this because it
-     doesn't exist until React hydrates, which is exactly the gap this closes. */
+     frozen on screen. An inline <script> (see GlobalCurtain — not a React
+     effect, so it isn't gated by hydration) adds .curtain-done at a fixed
+     time to release it. */
   html:not(.curtain-done) {
     overflow: hidden;
   }
+}
+
+/* Global curtain intro. CSS-only (transform/opacity, compositor-driven) on
+   purpose — a JS/GSAP-timed version depends on React having hydrated and the
+   main thread being free to run tweens every frame, both of which can lag
+   several seconds on a throttled device, during which the reveal either
+   never started (logo stuck in a raw, half-styled state) or stuttered badly
+   once it did. Durations here are fixed and start the instant the
+   server-rendered HTML paints, so the sequence looks identical on a fast
+   desktop and a throttled phone. Keep in sync with READY_MS in GlobalCurtain.tsx. */
+.curtain-logo {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.92);
+  will-change: transform, opacity;
+  animation:
+    curtain-logo-in 0.4s ease-out 0.1s forwards,
+    curtain-logo-out 0.12s ease-in 0.62s forwards;
+}
+.curtain-top,
+.curtain-bottom {
+  will-change: transform;
+  animation: curtain-open-top 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.76s forwards;
+}
+.curtain-bottom {
+  animation-name: curtain-open-bottom;
+}
+@keyframes curtain-logo-in {
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes curtain-logo-out {
+  to { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes curtain-open-top {
+  to { transform: translateY(-100%); }
+}
+@keyframes curtain-open-bottom {
+  to { transform: translateY(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .curtain-logo,
+  .curtain-top,
+  .curtain-bottom {
+    animation: none !important;
+  }
+  .curtain-top { transform: translateY(-100%); }
+  .curtain-bottom { transform: translateY(100%); }
+  .curtain-logo { opacity: 0; transform: translate(-50%, -50%) scale(1); }
 }
 
 /* Scrollbar */
