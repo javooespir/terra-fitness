@@ -41,7 +41,6 @@ export function FloatingGlobes({ wrapperRef }: { wrapperRef: React.RefObject<HTM
     const host = canvasHostRef.current;
     if (!wrapper || !host) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (window.innerWidth < 768) return;
 
     let disposed = false;
     let teardown: (() => void) | null = null;
