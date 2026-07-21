@@ -7,6 +7,7 @@ import { SiteFooterBar } from "@/components/SiteFooterBar";
 import { LocationSection } from "@/components/ClientSections";
 import { StorySection } from "@/components/StorySection";
 import { ClassesShowcaseSection } from "@/components/ClassesShowcaseSection";
+import { FloatingGlobesSpan } from "@/components/FloatingGlobesSpan";
 import { GlobalCurtain } from "@/components/GlobalCurtain";
 import { AmbientBackground } from "@/components/AmbientBackground";
 
@@ -25,8 +26,10 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <StorySection />
-      <ClassesShowcaseSection />
-      <PricingSection />
+      <FloatingGlobesSpan>
+        <ClassesShowcaseSection />
+        <PricingSection />
+      </FloatingGlobesSpan>
       <TestimonialsSection />
       <LocationSection />
       <SiteFooterBar />
