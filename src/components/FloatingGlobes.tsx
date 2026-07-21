@@ -71,8 +71,15 @@ export function FloatingGlobes({ wrapperRef }: { wrapperRef: React.RefObject<HTM
       const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 100);
       camera.position.z = 6;
 
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      // Position is a direct function of scroll with no smoothing (see layout()
+      // below), so any dropped render frame reads as a hard "jump" instead of a
+      // skipped in-between step. MSAA (antialias) and a high pixel ratio are
+      // real GPU cost on phone tile-based renderers — cheaper here means fewer
+      // dropped frames, which is what actually fixes the jump, not a tradeoff
+      // against performance.
+      const isNarrow = window.innerWidth < 768;
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isNarrow });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isNarrow ? 1 : 1.5));
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setClearColor(0x000000, 0);
       host.appendChild(renderer.domElement);
@@ -90,6 +97,7 @@ export function FloatingGlobes({ wrapperRef }: { wrapperRef: React.RefObject<HTM
         anchor: Anchor;
         floatSeed: number;
         spinVelocity: number;
+        placed: boolean;
       }
       const instances: Instance[] = [];
 
@@ -118,7 +126,7 @@ export function FloatingGlobes({ wrapperRef }: { wrapperRef: React.RefObject<HTM
             group.add(model);
             group.scale.setScalar(normalizeScale * mobileScale);
             scene.add(group);
-            instances.push({ group, anchor, floatSeed: Math.random() * Math.PI * 2, spinVelocity: 0.25 });
+            instances.push({ group, anchor, floatSeed: Math.random() * Math.PI * 2, spinVelocity: 0.25, placed: false });
           });
         },
         undefined,
@@ -161,8 +169,21 @@ export function FloatingGlobes({ wrapperRef }: { wrapperRef: React.RefObject<HTM
 
           const bobX = Math.sin(t * 0.6 + inst.floatSeed) * 0.12;
           const bobY = Math.cos(t * 0.5 + inst.floatSeed) * 0.15;
+          const targetX = x + bobX;
+          const targetY = y + bobY;
 
-          inst.group.position.set(x + bobX, y + bobY, 0);
+          // Position tracks scroll directly with no damping — smooth as long as
+          // every frame renders, but any dropped frame (more likely on a phone
+          // GPU) shows up as a hard snap instead of a skipped in-between step.
+          // Lerping toward the target instead costs a couple of float ops per
+          // instance (negligible) and hides that snap as motion instead.
+          if (!inst.placed) {
+            inst.group.position.set(targetX, targetY, 0);
+            inst.placed = true;
+          } else {
+            inst.group.position.x += (targetX - inst.group.position.x) * 0.28;
+            inst.group.position.y += (targetY - inst.group.position.y) * 0.28;
+          }
           inst.group.rotation.y += inst.spinVelocity * (1 / 60);
           inst.group.rotation.x = Math.sin(t * 0.35 + inst.floatSeed) * 0.15;
 
