@@ -105,13 +105,18 @@ export function FloatingGlobes({ wrapperRef }: { wrapperRef: React.RefObject<HTM
           box.getCenter(center);
           const maxDim = Math.max(size.x, size.y, size.z) || 1;
           const normalizeScale = 1.05 / maxDim;
+          // The object's world-unit size is fixed, but a narrow phone screen
+          // maps to a much smaller world width than a desktop one (same FOV,
+          // smaller aspect ratio) — so the same size reads as huge and clips
+          // off the edges on mobile. Just a size constant, no extra work.
+          const mobileScale = window.innerWidth < 640 ? 0.55 : window.innerWidth < 1024 ? 0.75 : 1;
 
           ANCHORS.forEach((anchor) => {
             const model = gltf.scene.clone(true);
             model.position.sub(center);
             const group = new THREE.Group();
             group.add(model);
-            group.scale.setScalar(normalizeScale);
+            group.scale.setScalar(normalizeScale * mobileScale);
             scene.add(group);
             instances.push({ group, anchor, floatSeed: Math.random() * Math.PI * 2, spinVelocity: 0.25 });
           });
@@ -151,7 +156,7 @@ export function FloatingGlobes({ wrapperRef }: { wrapperRef: React.RefObject<HTM
         instances.forEach((inst) => {
           const p = progressForAnchor(scrollProgress, inst.anchor);
           const y = halfH + 1.4 - p * (halfH * 2 + 2.8);
-          const xEdge = halfW * 0.78;
+          const xEdge = halfW * (window.innerWidth < 640 ? 0.62 : 0.78);
           const x = inst.anchor.side === "left" ? -xEdge : xEdge;
 
           const bobX = Math.sin(t * 0.6 + inst.floatSeed) * 0.12;
