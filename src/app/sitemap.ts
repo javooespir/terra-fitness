@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = "https://terra-fitness.com.ar";
+const siteUrl = "https://terrafitness.com.ar";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

@@ -110,7 +110,7 @@ export default function OGImage() {
             display: "flex",
           }}
         >
-          terra-fitness.com.ar
+          terrafitness.com.ar
         </div>
       </div>
     ),

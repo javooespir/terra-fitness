@@ -1,4 +1,4 @@
-const siteUrl = "https://terra-fitness.com.ar";
+const siteUrl = "https://terrafitness.com.ar";
 
 // Static, developer-controlled data — safe to inject via dangerouslySetInnerHTML
 // (no user input involved). This is the standard Next.js pattern for JSON-LD.
