@@ -16,7 +16,6 @@ interface ClassItem {
   photo: string;
   video: string | null;
   minutes: string;
-  intensity: string;
   desc: string;
   icon: string;
 }
@@ -29,7 +28,6 @@ const CLASSES: ClassItem[] = [
     photo: "/photos/class-musculacion.jpg",
     video: "/videos/class-musculacion.mp4",
     minutes: "45'",
-    intensity: "3",
     desc: "Trabajo con pesas libres y máquinas guiadas. Rutinas armadas para vos, progresión real semana a semana y profes encima de tu técnica todo el tiempo.",
     icon: "/icons/icon-musculacion.png",
   },
@@ -40,7 +38,6 @@ const CLASSES: ClassItem[] = [
     photo: "/photos/class-crossfit.jpg",
     video: "/videos/class-crossfit.mp4",
     minutes: "50'",
-    intensity: "5",
     desc: "Entrenamiento funcional de alta intensidad. Wods que cambian todos los días, trabajo en grupo y esa sensación de terminar reventado pero mejor que ayer.",
     icon: "/icons/icon-crossfit.png",
   },
@@ -51,7 +48,6 @@ const CLASSES: ClassItem[] = [
     photo: "/photos/class-calistenia.jpg",
     video: "/videos/class-calistenia.mp4",
     minutes: "40'",
-    intensity: "4",
     desc: "Control total del propio cuerpo. Barras, anillas y progresiones de fuerza que te llevan del primer dominadas a movimientos que hoy ni te imaginás.",
     icon: "/icons/icon-calistenia.png",
   },
@@ -62,7 +58,6 @@ const CLASSES: ClassItem[] = [
     photo: "/photos/class-boxeo.jpg",
     video: null,
     minutes: "45'",
-    intensity: "5",
     desc: "Técnica de golpes, guardia y trabajo en bolsa. Descarga de estrés, reflejos más rápidos y una condición física que se nota fuera del ring.",
     icon: "/icons/icon-boxeo.png",
   },
@@ -364,7 +359,7 @@ export function ClassesShowcaseSection() {
       {active && (
         <div
           ref={overlayRef}
-          className="fixed inset-0 z-[200] flex items-center justify-center"
+          className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto"
           style={{ background: "#e6c520" }}
         >
           <button
@@ -393,59 +388,50 @@ export function ClassesShowcaseSection() {
               </b>
             </div>
 
-            <div
-              ref={mediaRef}
-              className="relative rounded-[18px] overflow-hidden bg-black"
-              style={{ width: "clamp(220px, 26vw, 380px)", aspectRatio: "3 / 4", boxShadow: "0 30px 70px rgba(0,0,0,.35)" }}
-            >
-              {active.video ? (
-                <video
-                  ref={videoElRef}
-                  src={active.video}
-                  className="w-full h-full object-cover block"
-                  loop
-                  muted
-                  playsInline
-                />
-              ) : (
-                <>
-                  <img src={active.photo} alt={active.name} className="w-full h-full object-cover block" />
-                  <span className="absolute bottom-3 right-3 rounded-full px-3 py-1 text-white text-[0.6rem] uppercase tracking-wide" style={{ background: "rgba(10,10,10,.75)" }}>
-                    Próximamente video
-                  </span>
-                </>
-              )}
-            </div>
-
-            <div
-              className="cl-stat-anim flex md:absolute flex-row md:flex-col items-center gap-3 md:gap-2 text-[#0a0a0a]"
-              style={{ right: "clamp(1rem, 8vw, 8rem)", top: "50%", transform: "translateY(-50%)" }}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
-                <path d="M4.9 19a9 9 0 1 1 14.2 0" />
-                <path d="M12 13 16 8" />
-                <circle cx="12" cy="13" r="1.4" fill="currentColor" stroke="none" />
-              </svg>
-              <b className="font-black text-center leading-tight" style={{ fontFamily: "var(--font-barlow-condensed)", fontSize: "1.1rem" }}>
-                {active.intensity}
-                <br />
-                Intensidad
-              </b>
-            </div>
-
-            <div className="cl-desc-anim md:absolute md:left-1/2 md:bottom-12 md:-translate-x-1/2 max-w-xl w-[90%] text-center text-[#0a0a0a]">
-              <small
-                className="block mb-1 font-black uppercase"
-                style={{ fontFamily: "var(--font-barlow-condensed)", fontSize: "clamp(1.6rem, 3.4vw, 2.4rem)", letterSpacing: "-0.01em" }}
+            <div className="flex flex-col items-center gap-6 md:gap-8">
+              <div
+                ref={mediaRef}
+                className="relative rounded-[18px] overflow-hidden bg-black"
+                style={{ width: "clamp(220px, 26vw, 380px)", aspectRatio: "3 / 4", boxShadow: "0 30px 70px rgba(0,0,0,.35)" }}
               >
-                {active.name}
-              </small>
-              <span
-                className="block font-bold uppercase leading-relaxed"
-                style={{ fontSize: "clamp(0.85rem, 1.6vw, 1.05rem)" }}
-              >
-                {active.desc}
-              </span>
+                {active.video ? (
+                  <video
+                    ref={videoElRef}
+                    src={active.video}
+                    className="w-full h-full object-cover block"
+                    loop
+                    muted
+                    playsInline
+                  />
+                ) : (
+                  <>
+                    <img src={active.photo} alt={active.name} className="w-full h-full object-cover block" />
+                    <span className="absolute bottom-3 right-3 rounded-full px-3 py-1 text-white text-[0.6rem] uppercase tracking-wide" style={{ background: "rgba(10,10,10,.75)" }}>
+                      Próximamente video
+                    </span>
+                  </>
+                )}
+              </div>
+
+              {/* Was absolutely positioned at a fixed distance from the modal's
+                  bottom edge — on a short viewport that landed on top of the
+                  video instead of below it. Now flows right after the video
+                  in the same column, so it always clears it regardless of
+                  viewport height. */}
+              <div className="cl-desc-anim max-w-xl w-[90%] text-center text-[#0a0a0a]">
+                <small
+                  className="block mb-1 font-black uppercase"
+                  style={{ fontFamily: "var(--font-barlow-condensed)", fontSize: "clamp(1.6rem, 3.4vw, 2.4rem)", letterSpacing: "-0.01em" }}
+                >
+                  {active.name}
+                </small>
+                <span
+                  className="block font-bold uppercase leading-relaxed"
+                  style={{ fontSize: "clamp(0.85rem, 1.6vw, 1.05rem)" }}
+                >
+                  {active.desc}
+                </span>
+              </div>
             </div>
           </div>
         </div>
